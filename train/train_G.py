@@ -39,7 +39,7 @@ parser.add_argument('--input_json', default='../script/data/visdial_params.json'
 parser.add_argument('--outf', default='./save', help='folder to output images and model checkpoints')
 parser.add_argument('--encoder', default='G_QIH_VGG', help='what encoder to use.')
 parser.add_argument('--model_path', default='', help='folder to output images and model checkpoints')
-parser.add_argument('--num_val', default=1000, help='number of image split out as validation set.')
+parser.add_argument('--num_val', default=20, help='number of image split out as validation set.')
 
 parser.add_argument('--niter', type=int, default=50, help='number of epochs to train for')
 parser.add_argument('--start_epoch', type=int, default=0, help='start of epochs to train for')
@@ -93,9 +93,9 @@ torch.manual_seed(opt.manualSeed)
 cudnn.benchmark = True
 
 # ---------------------- check for data correctnes -------------------------------------
-if check_data()==False:
-    print("data is not up-to-date")
-    exit(255)
+# if check_data()==False:
+#     print("data is not up-to-date")
+#     exit(255)
 
 # ---------------------- -------------------------------------------------------
 if torch.cuda.is_available() and not opt.cuda:
@@ -105,6 +105,7 @@ if opt.model_path != '':
     print("=> loading checkpoint '{}'".format(opt.model_path))
     checkpoint = torch.load(opt.model_path)
     model_path = opt.model_path
+
     opt = checkpoint['opt']
     opt.start_epoch = checkpoint['epoch']
     opt.model_path = model_path

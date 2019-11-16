@@ -15,7 +15,7 @@ class train(data.Dataset) :  # torch wrapper
     def __init__(self, input_img_h5, input_ques_h5, input_json, negative_sample, num_val, data_split) :
         #This is the number of images for which we have copied the new vgg features to the parallely
         #accessible h5 file. DO NOT CHANGE THIS!!!
-        TOTAL_VALID_IMAGES = 82000
+        TOTAL_VALID_IMAGES = 1000
 
         print(h5py.version.info)
         print('DataLoader loading: %s' % data_split)
@@ -158,8 +158,8 @@ class validate(data.Dataset) :  # torch wrapper
     def __init__(self, input_img_h5, input_ques_h5, input_json, negative_sample, num_val, data_split) :
         # This is the number of images for which we have copied the new vgg features to the parallely
         # accessible h5 file. DO NOT CHANGE THIS!!!
-        TOTAL_VALID_TEST_IMAGES = 40000
-        TOTAL_VALID_TRAIN_IMAGES = 82000
+        TOTAL_VALID_TEST_IMAGES = 0
+        TOTAL_VALID_TRAIN_IMAGES = 1000
         print('DataLoader loading: %s' % data_split)
         print('Loading image feature from %s' % input_img_h5)
         total_num = 0
