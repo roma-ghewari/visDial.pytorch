@@ -62,7 +62,7 @@ class _netG(nn.Module):
 		seq = torch.LongTensor(self.seq_length, batch_size).zero_()
 		seqLogprobs = torch.FloatTensor(self.seq_length, batch_size)
 		# lets process every image independently for now, for simplicity
-
+		logprobs = None
 		self.done_beams = [[] for _ in range(batch_size)]
 		for k in range(batch_size):
 			# copy the hidden state for beam_size time.
@@ -148,11 +148,11 @@ class _netG(nn.Module):
 				if self.mos_flag:
 					decoded = self.mos_layer(output.view(
 						output.size(0) * output.size(1), output.size(2)))
-					logprob = torch.log(self.beta * decoded)
+					logprobs = torch.log(self.beta * decoded)
 				else:
 					decoded = self.decoder(output.view(
 						output.size(0) * output.size(1), output.size(2)))
-					logprob = F.log_softmax(self.beta * decoded)
+					logprobs = F.log_softmax(self.beta * decoded)
 
 			self.done_beams[k] = sorted(self.done_beams[k], key=lambda x: -x['p'])
 			seq[:, k] = self.done_beams[k][0]['seq'] # the first beam has highest cumulative score
@@ -177,6 +177,7 @@ class _netG(nn.Module):
 		batch_size = input.size(1)
 		seq = []
 		seqLogprobs = []
+		logprobs = None
 		for t in range(self.seq_length + 1):
 			if t == 0: # input <bos>
 				it = input.data
@@ -206,10 +207,10 @@ class _netG(nn.Module):
 			if self.mos_flag:
 				decoded = self.mos_layer(output.view(
 					output.size(0) * output.size(1), output.size(2)))
-				logprob = torch.log(self.beta * decoded)
+				logprobs = torch.log(self.beta * decoded)
 			else:
 				decoded = self.decoder(output.view(
 					output.size(0) * output.size(1), output.size(2)))
-				logprob = F.log_softmax(self.beta * decoded)
+				logprobs = F.log_softmax(self.beta * decoded)
 
 		return torch.cat([_.unsqueeze(1) for _ in seq], 1), torch.cat([_.unsqueeze(1) for _ in seqLogprobs], 1)

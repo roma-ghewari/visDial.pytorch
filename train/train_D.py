@@ -37,7 +37,7 @@ import datetime
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('--input_img_h5', default='/home/smit/DataLoader/Scripts/vgg16_data.hdf5', help='path to image feature, now hdf5 file')
+parser.add_argument('--input_img_h5', default='../script/data/vdl_img_vgg.h5', help='path to image feature, now hdf5 file')
 parser.add_argument('--input_ques_h5', default='../script/data/visdial_data.h5', help='path to label, now hdf5 file')
 parser.add_argument('--input_json', default='../script/data/visdial_params.json', help='path to dataset, now json file')
 parser.add_argument('--outf', default='./save', help='folder to output model checkpoints')
@@ -84,6 +84,14 @@ from misc.utils import repackage_hidden, repackage_hidden_new, clip_gradient, ad
 import misc.dataLoader as dl
 import misc.model as model
 from misc.encoder_QIH import _netE
+from script.test_data import check_data
+
+# ---------------------- check for data correctnes -------------------------------------
+if check_data() == False:
+    print("data is not up-to-date")
+    exit(255)
+
+# ---------------------- -------------------------------------------------------
 
 
 opt.manualSeed = random.randint(1, 10000) # fix seed

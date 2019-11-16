@@ -32,7 +32,7 @@ from torch.autograd import Variable
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('--input_img_h5', default='/home/smit/DataLoader/Scripts/vgg16_data.hdf5', help='path to dataset, now hdf5 file')
+parser.add_argument('--input_img_h5', default='../script/data/vdl_img_vgg.h5', help='path to dataset, now hdf5 file')
 parser.add_argument('--input_ques_h5', default='../script/data/visdial_data.h5', help='path to dataset, now hdf5 file')
 parser.add_argument('--input_json', default='../script/data/visdial_params.json', help='path to dataset, now hdf5 file')
 parser.add_argument('--outf', default='./save', help='folder to output images and model checkpoints')
@@ -91,12 +91,21 @@ import misc.model as model
 from misc.encoder_QIH import _netE
 from misc.netG import _netG
 import datetime
+from script.test_data import check_data
 
 opt.manualSeed = random.randint(1, 10000) # fix seed
 print("Random Seed: ", opt.manualSeed)
 random.seed(opt.manualSeed)
 torch.manual_seed(opt.manualSeed)
 np.random.seed(opt.manualSeed)
+
+# ---------------------- check for data correctnes -------------------------------------
+if check_data() == False:
+    print("data is not up-to-date")
+    exit(255)
+
+# ---------------------- -------------------------------------------------------
+
 
 if opt.cuda:
     torch.cuda.manual_seed(opt.manualSeed)
