@@ -5,6 +5,7 @@ import pdb
 import math
 import numpy as np
 import torch.nn.functional as F
+#import time
 
 class _netE(nn.Module):
     """Container module with an encoder, a recurrent module, and a decoder."""
